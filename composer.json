@@ -1,0 +1,35 @@
+{
+    "name": "hendeavors/sdk",
+    "description": "A PHP wrapper for HealthEndeavors's API",
+    "keywords": ["healthendeavors", "api"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Rodriguez",
+            "email": "adam@healthendeavors.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Hendeavors\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hendeavors\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8|~5.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "require": {
+        "league/oauth2-client": "^2.4"
+    }
+}
