@@ -47,6 +47,15 @@ class InvalidGrantException extends LeagueInvalidGrantException
         return new static($errorMessage, $hint, 1003);
     }
 
+    public static function grantAlreadyScoped()
+    {
+        $errorMessage = "The grant is scoped.";
+
+        $hint = "See Hendeavors\Grant\ScopedGrant.";
+
+        return new static($errorMessage, $hint, 1004);
+    }
+
     public function getHint()
     {
         return $this->hint;

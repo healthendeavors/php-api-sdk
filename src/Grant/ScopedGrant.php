@@ -19,4 +19,9 @@ class ScopedGrant implements GrantInterface
     {
         return $this->grant->getAccessToken();
     }
+
+    public function withScope(string $scope)
+    {
+        throw Exception\InvalidGrantException::grantAlreadyScoped();
+    }
 }

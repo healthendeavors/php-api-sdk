@@ -11,8 +11,9 @@ use Hendeavors\Grant\ResourceOwnerPasswordGrant;
 use Hendeavors\Grant\ScopedGrant;
 use Hendeavors\HendeavorsClient;
 use Hendeavors\HendeavorsProvider;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 
-class Access implements AccessInterface
+class Access implements AccessInterface, FactoryBuilderInterface
 {
     private $factory;
 
@@ -45,7 +46,7 @@ class Access implements AccessInterface
     /**
      * Make the request to gain access(authenticate)
      */
-    public function authenticate()
+    public function authenticate() : AccessTokenInterface
     {
         if (null === ($grant = $this->getFactory()->getGrant())) {
             throw InvalidGrantException::missingAuthenticationGrant();

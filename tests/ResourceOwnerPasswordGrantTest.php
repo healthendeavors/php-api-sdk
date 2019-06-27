@@ -13,7 +13,7 @@ class ResourceOwnerPasswordGrantTest extends TestCase
     public function createPasswordGrant()
     {
         $provider = new HendeavorsProvider();
-        $client = new HendeavorsClient($provider, "2", "OHBW7pKKankEQoVGCFWzdZBrq2QwYXG3sPPOHoWW","");
+        $client = new HendeavorsClient($provider, "2", "9ZCWkURqK1H6QPwspVN58me9wiptDc1WN3d7nMdj","");
         $grant = new ResourceOwnerPasswordGrant($client, "healthendeavorsadmin@healthendeavors.com", "HEPass$3456");
     }
 
@@ -21,7 +21,7 @@ class ResourceOwnerPasswordGrantTest extends TestCase
     public function getAccessTokenPasswordGrant()
     {
         $provider = new HendeavorsProvider();
-        $client = new HendeavorsClient($provider, "2", "OHBW7pKKankEQoVGCFWzdZBrq2QwYXG3sPPOHoWW", "");
+        $client = new HendeavorsClient($provider, "2", "9ZCWkURqK1H6QPwspVN58me9wiptDc1WN3d7nMdj", "");
         $grant = new ResourceOwnerPasswordGrant($client, "healthendeavorsadmin@healthendeavors.com", "HEPass$3456");
         $token = $grant->getAccessToken();
     }

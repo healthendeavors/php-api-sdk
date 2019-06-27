@@ -4,11 +4,13 @@ namespace Hendeavors\Auth\Factory;
 
 use Hendeavors\Contracts\Auth\FactoryBuilderInterface;
 use Hendeavors\Grant\ResourceOwnerPasswordGrant;
+use Hendeavors\Grant\ClientCredentialsGrant;
 use Hendeavors\Grant\ScopedGrant;
 use Hendeavors\HendeavorsClient;
 use Hendeavors\HendeavorsProvider;
 use Hendeavors\Contracts\Grant\GrantInterface;
 use Hendeavors\Grant\Exception\InvalidGrantException;
+use LogicException;
 
 class AccessBuilder implements FactoryBuilderInterface
 {
@@ -29,7 +31,7 @@ class AccessBuilder implements FactoryBuilderInterface
 
         $this->client = new HendeavorsClient($provider, $id, $secret, $redirect);
 
-        return $this;
+        return $this->using(new ClientCredentialsGrant($this->client));
     }
 
     public function withPassword($username, $password): FactoryBuilderInterface
@@ -47,14 +49,12 @@ class AccessBuilder implements FactoryBuilderInterface
             throw InvalidGrantException::scopeRequiresGrant();
         }
 
-        $this->using(new ScopedGrant($this->grant, $scope));
-
-        return $this;
+        return $this->using(new ScopedGrant($this->grant, $scope));
     }
 
     public function authenticate()
     {
-        throw new \LogicException("Invalid State. See Hendeavors\Contracts\Auth\AccessInterface for authentication.");
+        throw new LogicException("Invalid State. See Hendeavors\Contracts\Auth\AccessInterface for authentication.");
     }
 
     public function getGrant()

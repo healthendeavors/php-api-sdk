@@ -14,14 +14,14 @@ class UserAccessTest extends TestCase
     public function acquireUserAccessToken()
     {
         $provider = new HendeavorsProvider();
-        $client = new HendeavorsClient($provider, "2", "OHBW7pKKankEQoVGCFWzdZBrq2QwYXG3sPPOHoWW", "");
+        $client = new HendeavorsClient($provider, "2", "9ZCWkURqK1H6QPwspVN58me9wiptDc1WN3d7nMdj", "");
         $grant = new ResourceOwnerPasswordGrant($client, "healthendeavorsadmin@healthendeavors.com", "HEPass$3456");
 
-        $accessToken = (new UserAccess);
+        $access = (new UserAccess);
 
-        $accessToken->using($grant);
+        $access->using($grant);
 
-        $token = $accessToken->authenticate();
+        $token = $access->authenticate();
     }
 
     /** @test */
@@ -30,7 +30,7 @@ class UserAccessTest extends TestCase
         $accessToken = (new UserAccess);
 
         $accessToken
-        ->withClient("2", "OHBW7pKKankEQoVGCFWzdZBrq2QwYXG3sPPOHoWW")
+        ->withClient("2", "9ZCWkURqK1H6QPwspVN58me9wiptDc1WN3d7nMdj")
         ->withPassword("healthendeavorsadmin@healthendeavors.com", "HEPass$3456");
 
         $token = $accessToken->authenticate();
@@ -43,8 +43,23 @@ class UserAccessTest extends TestCase
     public function properUserAccessUsage()
     {
         $accessToken = (new UserAccess)
+        ->withClient("2", "9ZCWkURqK1H6QPwspVN58me9wiptDc1WN3d7nMdj")
+        ->withPassword("healthendeavorsadmin@healthendeavors.com", "HEPass$3456")
+        ->authenticate();
+    }
+
+    /**
+     * @test
+     * @expectedException \Hendeavors\Grant\Exception\InvalidGrantException
+     * @expectedExceptionMessage The grant is scoped.
+     */
+    public function attemptTwoScopes()
+    {
+        $accessToken = (new UserAccess)
         ->withClient("2", "OHBW7pKKankEQoVGCFWzdZBrq2QwYXG3sPPOHoWW")
         ->withPassword("healthendeavorsadmin@healthendeavors.com", "HEPass$3456")
+        ->withScope("myscope")
+        ->withScope("myscope")
         ->authenticate();
     }
 }

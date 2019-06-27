@@ -27,6 +27,15 @@ class HendeavorsProvider implements ProviderInterface
         return $this->getBaseUrl() . '/oauth/authorize';
     }
 
+    /**
+     * Get the full base url and prefix to make api requests
+     * @return string the base url and prefix
+     */
+    public function getApiPrefixUrl(): string
+    {
+        return $this->getBaseUrl() . '/api';
+    }
+
     protected function getBaseUrl()
     {
         return 'https://sandbox.healthendeavors.com';

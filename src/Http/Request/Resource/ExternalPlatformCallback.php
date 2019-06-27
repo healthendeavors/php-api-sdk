@@ -3,33 +3,32 @@
 namespace Hendeavors\Http\Request\Resource;
 
 use Hendeavors\Contracts\Auth\AccessInterface;
-use Hendeavors\Contracts\ProviderInterface;
-use League\OAuth2\Client\Token\AccessTokenInterface;
-use Hendeavors\HendeavorsProvider;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use Hendeavors\Model\User as UserModel;
+use Hendeavors\Model\ExternalPlatformCallback as ExternalPlatformCallbackModel;
 
-class User implements ResourceInterface
+class ExternalPlatformCallback
 {
     private $token;
 
     private $provider;
 
-    public function __construct(AccessTokenInterface $token, ProviderInterface $provider)
+    private $oauthUserId;
+
+    public function __construct(AccessTokenInterface $token, ProviderInterface $provider, int $oauthUserId)
     {
         $this->token = $token;
 
         $this->provider = $provider;
+
+        $this->oauthUserId = $oauthUserId;
     }
 
-    public static function fromToken(AccessTokenInterface $token, ProviderInterface $provider = null)
+    public static function fromToken(AccessTokenInterface $token, int $oauthUserId, ProviderInterface $provider = null)
     {
         if (null === $provider) {
             $provider = new HendeavorsProvider();
         }
 
-        return new static($token, $provider);
+        return new static($token, $provider, $oauthUserId);
     }
 
     public function first()
@@ -46,21 +45,21 @@ class User implements ResourceInterface
 
     public function all(): array
     {
-        $users = json_decode($this->request(static::USERS));
+        $users = json_decode($this->request());
 
         return array_map(function($item) {
-            return new UserModel($item);
+            return new ExternalPlatformCallbackModel($item);
         }, (array)$users->data);
     }
 
-    public function find(int $userid)
+    public function find(int $externalPlatformCallbackId)
     {
         // find one user e.g. api/users/{user}
     }
 
-    protected function request(string $url)
+    protected function request()
     {
-        $response = $this->client()->get('/api/users', [
+        $response = $this->client()->get('/api/users/' . $this->oauthUserId . '/callback-urls', [
             'headers' => [
                 'Authorization' => 'Bearer '.$this->token->getToken()
             ],
